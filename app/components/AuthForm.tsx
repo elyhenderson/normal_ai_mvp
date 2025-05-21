@@ -21,10 +21,10 @@ export default function AuthForm() {
     try {
       if (mode === 'signin') {
         await signIn(email, password)
-        router.push('/dashboard')
+        router.push('/onboarding/select-brand')
       } else {
         await signUp(email, password)
-        setError('Please check your email for verification link')
+        router.push('/onboarding/select-brand')
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred')

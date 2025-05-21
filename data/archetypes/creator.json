@@ -1,0 +1,48 @@
+{
+  "name": "The Creator",
+  "tagline_logic": "Taglines should feel poetic but intentional. Start with feeling, land with clarity. Avoid startup speak.",
+  "emotional_dna": [
+    "expressive",
+    "story-led",
+    "poetic",
+    "warm",
+    "fluid",
+    "soulful",
+    "imaginative"
+  ],
+  "tone_flavor": "Feels hand-made and emotionally intelligent. Like a voiceover in an indie film or a caption on an artist's sketchbook.",
+  "voice_traits": ["poetic", "curious", "open", "layered", "personal"],
+  "font_tendencies": [
+    "Canela",
+    "Neue Montreal",
+    "Editorial New",
+    "ABC Diatype"
+  ],
+  "color_bias": [
+    { "hex": "#EDE7E0", "label": "Canvas Beige" },
+    { "hex": "#191919", "label": "Charcoal Black" },
+    { "hex": "#DAA520", "label": "Soft Gold" },
+    { "hex": "#F3F3F3", "label": "Paper White" }
+  ],
+  "blob_behavior": {
+    "motion": "slow ripple with natural drag",
+    "shape": "off-center organic with a breathing tension",
+    "material": "matte clay with slight grain"
+  },
+  "logo_direction": "Often wordmark-based or hand-drawn feeling. Imperfect on purpose. Could include typographic tweaks, negative space moments, or unexpected softness.",
+  "layout_preferences": ["loose-flow", "editorial-modular"],
+  "photo_transforms": ["warm-film-scan", "grainy-slowcore"],
+  "example_headlines": [
+    "You don't scale this. You feel it.",
+    "Built like a short story.",
+    "This isn't a product. It's a practice."
+  ],
+  "moodboard_tags": [
+    "hand-painted texture",
+    "warm ambient light",
+    "loose grids",
+    "analog color tone",
+    "paper texture",
+    "sketchbook overlays"
+  ]
+}
