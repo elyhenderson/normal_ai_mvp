@@ -12,6 +12,28 @@ export async function POST(req: Request) {
       )
     }
 
+    // First create a brand
+    const { data: brand, error: brandError } = await supabase
+      .from('brands')
+      .insert([
+        {
+          user_id,
+          name: 'New Brand', // You might want to generate this from the input
+          description: input,
+          creation_method: 'freestyle'
+        }
+      ])
+      .select('id')
+      .single()
+
+    if (brandError) {
+      console.error('Supabase brand insert error:', brandError)
+      return Response.json(
+        { error: 'Failed to create brand' },
+        { status: 500 }
+      )
+    }
+
     // Prompt GPT to analyze the brand input
     const gptPrompt = `
       Analyze this brand description and generate a comprehensive brand identity. 
@@ -98,14 +120,13 @@ export async function POST(req: Request) {
       .insert([
         {
           user_id,
-          input_text: input,
+          brand_id: brand.id,
           brand_story: brandData.brand_story,
           tagline: brandData.tagline,
           tone: brandData.tone,
           voice_traits: brandData.voice_traits,
           primary_archetype: brandData.primary_archetype,
           secondary_archetype: brandData.secondary_archetype,
-          blob_behavior: brandData.blob_behavior,
           color_palette: brandData.color_palette,
           font_suggestions: brandData.font_suggestions,
           logo_direction: brandData.logo_direction,
@@ -125,7 +146,7 @@ export async function POST(req: Request) {
       )
     }
 
-    return Response.json({ id: brain.id })
+    return Response.json({ id: brain.id, brand_id: brand.id })
   } catch (error) {
     console.error('Error in createBrain:', error)
     return Response.json(
