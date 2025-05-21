@@ -42,7 +42,8 @@ export default function Freestyle() {
         },
         body: JSON.stringify({
           user_id: user?.id,
-          input: description
+          input: description,
+          brand_id: brand.id
         }),
       })
 

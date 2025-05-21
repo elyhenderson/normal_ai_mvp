@@ -1,35 +1,62 @@
-import { supabase } from '../../../lib/supabaseClient'
+import { supabaseAdmin } from '../../../lib/supabaseAdmin'
 import { chatWithGPT } from '../../../lib/gpt'
+
+interface BrandData {
+  brand_story: string
+  tagline: string
+  tone: string
+  voice_traits: string[]
+  primary_archetype: string
+  secondary_archetype: string
+  color_palette: {
+    primary: string
+    secondary: string
+    accent: string
+    neutral: string
+  }
+  font_suggestions: {
+    headings: string
+    body: string
+  }
+  logo_direction: {
+    style: string
+    elements: string[]
+    concepts: string[]
+  }
+  layout_style: {
+    grid: string
+    spacing: string
+    hierarchy: string
+  }
+  photo_transform: {
+    style: string
+    filters: string[]
+    mood: string
+  }
+}
 
 export async function POST(req: Request) {
   try {
-    const { user_id, input } = await req.json()
+    const { user_id, input, brand_id } = await req.json()
 
-    if (!user_id || !input) {
+    if (!user_id || !input || !brand_id) {
       return Response.json(
         { error: 'Missing required fields' },
         { status: 400 }
       )
     }
 
-    // First create a brand
-    const { data: brand, error: brandError } = await supabase
+    // Get the brand name
+    const { data: brand, error: brandError } = await supabaseAdmin
       .from('brands')
-      .insert([
-        {
-          user_id,
-          name: 'New Brand', // You might want to generate this from the input
-          description: input,
-          creation_method: 'freestyle'
-        }
-      ])
-      .select('id')
+      .select('name')
+      .eq('id', brand_id)
       .single()
 
     if (brandError) {
-      console.error('Supabase brand insert error:', brandError)
+      console.error('Supabase brand fetch error:', brandError)
       return Response.json(
-        { error: 'Failed to create brand' },
+        { error: 'Failed to fetch brand' },
         { status: 500 }
       )
     }
@@ -94,45 +121,76 @@ export async function POST(req: Request) {
     const gptResponse = await chatWithGPT(messages)
     
     if (!gptResponse) {
+      console.error('GPT returned empty response')
       return Response.json(
         { error: 'Failed to get response from GPT' },
         { status: 500 }
       )
     }
 
-    let brandData
+    let brandData: BrandData
     try {
       // Remove any markdown formatting if present
-      const cleanResponse = gptResponse.replace(/```json\n|\n```/g, '').trim()
+      const cleanResponse = gptResponse
+        .replace(/```json\n|\n```/g, '') // Remove markdown code blocks
+        .replace(/^[^{]*/, '') // Remove any text before the first {
+        .replace(/[^}]*$/, '') // Remove any text after the last }
+        .trim()
+
+      console.log('Cleaned GPT response:', cleanResponse)
+      
       brandData = JSON.parse(cleanResponse)
+      
+      // Validate required fields
+      const requiredFields = [
+        'brand_story',
+        'tagline',
+        'tone',
+        'voice_traits',
+        'primary_archetype',
+        'secondary_archetype',
+        'color_palette',
+        'font_suggestions',
+        'logo_direction',
+        'layout_style',
+        'photo_transform'
+      ] as const
+
+      const missingFields = requiredFields.filter(field => !(field in brandData))
+      if (missingFields.length > 0) {
+        throw new Error(`Missing required fields: ${missingFields.join(', ')}`)
+      }
+
     } catch (error) {
       console.error('Failed to parse GPT response:', error)
-      console.error('Raw response:', gptResponse)
+      console.error('Raw GPT response:', gptResponse)
       return Response.json(
-        { error: 'Failed to parse brand analysis' },
+        { 
+          error: 'Failed to parse brand analysis',
+          details: error instanceof Error ? error.message : 'Unknown error'
+        },
         { status: 500 }
       )
     }
 
     // Insert into Supabase
-    const { data: brain, error: insertError } = await supabase
+    const { data: brain, error: insertError } = await supabaseAdmin
       .from('brand_brains')
       .insert([
         {
           user_id,
-          brand_id: brand.id,
-          brand_story: brandData.brand_story,
-          tagline: brandData.tagline,
+          brand_name: brand.name,
+          archetype_primary: brandData.primary_archetype,
+          archetype_secondary: brandData.secondary_archetype,
           tone: brandData.tone,
           voice_traits: brandData.voice_traits,
-          primary_archetype: brandData.primary_archetype,
-          secondary_archetype: brandData.secondary_archetype,
+          tagline: brandData.tagline,
+          brand_story: brandData.brand_story,
           color_palette: brandData.color_palette,
           font_suggestions: brandData.font_suggestions,
-          logo_direction: brandData.logo_direction,
-          layout_style: brandData.layout_style,
-          photo_transform: brandData.photo_transform,
-          status: 'active'
+          logo_direction: JSON.stringify(brandData.logo_direction),
+          layout_style: JSON.stringify(brandData.layout_style),
+          photo_transformation: JSON.stringify(brandData.photo_transform)
         }
       ])
       .select('id')
@@ -146,7 +204,7 @@ export async function POST(req: Request) {
       )
     }
 
-    return Response.json({ id: brain.id, brand_id: brand.id })
+    return Response.json({ id: brain.id, brand_id })
   } catch (error) {
     console.error('Error in createBrain:', error)
     return Response.json(

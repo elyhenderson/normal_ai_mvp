@@ -1,31 +1,19 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useParams, useSearchParams } from 'next/navigation'
-import { useAuth } from '../../../context/AuthContext'
-import { supabase } from '../../../../utils/supabase'
-
-interface Brand {
-  id: string
-  name: string
-  description: string
-  creation_method: string
-  created_at: string
-}
+import { useEffect, useState, use } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { createClient } from '@supabase/supabase-js'
+import { useSearchParams } from 'next/navigation'
 
 interface BrainData {
   id: string
-  brand_story: string
-  tagline: string
+  brand_name: string
+  archetype_primary: string
+  archetype_secondary: string
   tone: string
   voice_traits: string[]
-  primary_archetype: string
-  secondary_archetype: string
-  blob_behavior: {
-    movement: string
-    speed: string
-    complexity: string
-  }
+  tagline: string
+  brand_story: string
   color_palette: {
     primary: string
     secondary: string
@@ -36,401 +24,372 @@ interface BrainData {
     headings: string
     body: string
   }
-  logo_direction: {
-    style: string
-    elements: string[]
-    concepts: string[]
-  }
-  layout_style: {
-    grid: string
-    spacing: string
-    hierarchy: string
-  }
-  photo_transform: {
-    style: string
-    filters: string[]
-    mood: string
-  }
+  logo_direction: string
+  layout_style: string
+  photo_transformation: string
+  created_at: string
+  user_id: string
 }
 
-export default function BrandOverview() {
-  const params = useParams()
+export default function BrandOverview({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = use(params)
   const searchParams = useSearchParams()
-  const { user } = useAuth()
-  const [brand, setBrand] = useState<Brand | null>(null)
+  const brainId = searchParams.get('brain_id')
   const [brainData, setBrainData] = useState<BrainData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [prompt, setPrompt] = useState('')
-  const [response, setResponse] = useState('')
-  const [isGptLoading, setIsGptLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Initialize Supabase client
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
 
   useEffect(() => {
-    async function fetchData() {
-      if (!user) return
-
+    const fetchBrainData = async () => {
       try {
-        // Fetch brand data
-        const { data: brandData, error: brandError } = await supabase
+        // First get the brand name
+        const { data: brand, error: brandError } = await supabase
           .from('brands')
-          .select('*')
-          .eq('id', params.id)
+          .select('name')
+          .eq('id', resolvedParams.id)
           .single()
 
-        if (brandError) throw brandError
-        setBrand(brandData)
+        if (brandError) {
+          console.error('Error fetching brand:', brandError)
+          setError('Failed to fetch brand information')
+          setIsLoading(false)
+          return
+        }
 
-        // Fetch brain data if brain_id is present
-        const brainId = searchParams.get('brain_id')
-        if (brainId) {
-          const { data: brain, error: brainError } = await supabase
-            .from('brand_brains')
-            .select('*')
-            .eq('id', brainId)
-            .single()
+        if (!brand) {
+          console.error('Brand not found')
+          setError('Brand not found')
+          setIsLoading(false)
+          return
+        }
 
-          if (brainError) throw brainError
-          setBrainData(brain)
+        console.log('Found brand:', brand)
+
+        // Then get the brain data using the brand name
+        const { data: brain, error: brainError } = await supabase
+          .from('brand_brains')
+          .select('*')
+          .eq('brand_name', brand.name)
+          .maybeSingle()
+
+        if (brainError) {
+          console.error('Error fetching brain:', brainError)
+          setError('Failed to fetch brand brain')
+          setIsLoading(false)
+          return
+        }
+
+        if (!brain) {
+          console.error('Brain not found for brand:', brand.name)
+          setError('Brand brain not found')
+          setIsLoading(false)
+          return
+        }
+
+        console.log('Found brain:', brain)
+
+        // Validate required fields
+        const requiredFields = ['id', 'brand_name', 'tone', 'voice_traits', 'tagline', 'brand_story']
+        const missingFields = requiredFields.filter(field => !brain[field])
+        
+        if (missingFields.length > 0) {
+          console.error('Missing required fields:', missingFields)
+          setError(`Missing required fields: ${missingFields.join(', ')}`)
+          setIsLoading(false)
+          return
+        }
+
+        // Only parse the text fields that need to be converted from JSON strings
+        try {
+          const parsedBrain = {
+            ...brain,
+            // These fields are already JSON objects from the database
+            voice_traits: brain.voice_traits || [],
+            color_palette: brain.color_palette || {},
+            font_suggestions: brain.font_suggestions || {},
+            // These fields need to be parsed from JSON strings
+            logo_direction: typeof brain.logo_direction === 'string' ? JSON.parse(brain.logo_direction) : brain.logo_direction || {},
+            layout_style: typeof brain.layout_style === 'string' ? JSON.parse(brain.layout_style) : brain.layout_style || {},
+            photo_transformation: typeof brain.photo_transformation === 'string' ? JSON.parse(brain.photo_transformation) : brain.photo_transformation || {}
+          }
+          setBrainData(parsedBrain)
+        } catch (parseError) {
+          console.error('Error parsing JSON fields:', parseError)
+          setError('Error parsing brain data')
         }
       } catch (error) {
-        console.error('Error fetching data:', error)
+        console.error('Error in fetchBrainData:', error)
+        if (error instanceof Error) {
+          setError(error.message)
+        } else {
+          setError('An unknown error occurred')
+        }
       } finally {
-        setLoading(false)
+        setIsLoading(false)
       }
     }
 
-    fetchData()
-  }, [user, params.id, searchParams])
+    fetchBrainData()
+  }, [resolvedParams.id])
 
-  const handleGptTest = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsGptLoading(true)
-    try {
-      const res = await fetch('/api/test-gpt', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt }),
-      })
-      const data = await res.json()
-      setResponse(data.result)
-    } catch (error) {
-      console.error('Error:', error)
-      setResponse('Error: Failed to get response from GPT')
-    } finally {
-      setIsGptLoading(false)
-    }
-  }
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center"
+        >
+          <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto"></div>
+          <p className="mt-4 text-gray-600 dark:text-gray-400">Loading your brand vision...</p>
+        </motion.div>
       </div>
     )
   }
 
-  if (!brand) {
+  if (error) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Brand not found</h2>
-          <p className="mt-2 text-gray-600 dark:text-gray-400">This brand doesn't exist or you don't have access to it.</p>
+          <p className="text-red-600 dark:text-red-400 mb-4">Error: {error}</p>
+          <p className="text-gray-600 dark:text-gray-400">Please try again or contact support if the problem persists.</p>
+          <p className="text-sm text-gray-500 mt-2">Brand ID: {resolvedParams.id}</p>
         </div>
       </div>
     )
   }
 
-  return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <nav className="bg-white shadow-sm dark:bg-gray-800">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{brand.name}</h1>
-            </div>
-          </div>
+  if (!brainData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <p className="text-gray-600 dark:text-gray-400">Brand brain not found</p>
+          <p className="text-sm text-gray-500 mt-2">Brand ID: {resolvedParams.id}</p>
         </div>
-      </nav>
+      </div>
+    )
+  }
 
-      <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
-        <div className="px-4 py-6 sm:px-0">
-          {/* Brand Description */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Brand Description
-            </h2>
-            <div className="prose dark:prose-invert">
-              <p className="text-gray-600 dark:text-gray-300 whitespace-pre-wrap">
-                {brand.description}
+  // Only parse the text fields that need to be converted from JSON strings
+  const logoDirection = typeof brainData.logo_direction === 'string' ? JSON.parse(brainData.logo_direction) : brainData.logo_direction
+  const layoutStyle = typeof brainData.layout_style === 'string' ? JSON.parse(brainData.layout_style) : brainData.layout_style
+  const photoTransform = typeof brainData.photo_transformation === 'string' ? JSON.parse(brainData.photo_transformation) : brainData.photo_transformation
+
+  return (
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <AnimatePresence>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="space-y-12"
+          >
+            {/* Hero Section */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                {brainData.tagline}
+              </h1>
+              <p className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto">
+                {brainData.brand_story}
               </p>
-            </div>
-          </div>
+            </motion.div>
 
-          {/* Brain Data Display */}
-          {brainData && (
-            <div className="space-y-6">
-              {/* Core Brand Elements */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            {/* Brand Identity Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {/* Voice & Tone */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+              >
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Core Brand Elements
+                  Voice & Tone
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Brand Story</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.brand_story}</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tagline</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.tagline}</p>
-                  </div>
+                <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tone</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.tone}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{brainData.tone}</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Voice Traits</h3>
                     <div className="flex flex-wrap gap-2">
                       {brainData.voice_traits.map((trait, index) => (
-                        <span key={index} className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm"
+                        >
                           {trait}
                         </span>
                       ))}
                     </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Archetypes */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              {/* Visual Identity */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+              >
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Brand Archetypes
+                  Visual Identity
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-6">
+                  {/* Color Palette */}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Primary Archetype</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.primary_archetype}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Color Palette</h3>
+                    <div className="grid grid-cols-2 gap-4">
+                      {Object.entries(brainData.color_palette).map(([name, color]) => (
+                        <div key={name} className="space-y-2">
+                          <div
+                            className="w-full h-24 rounded-lg shadow-inner"
+                            style={{ backgroundColor: color as string }}
+                          />
+                          <p className="text-sm text-gray-600 dark:text-gray-400 capitalize">
+                            {name}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
+                  {/* Typography */}
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Secondary Archetype</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.secondary_archetype}</p>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Typography</h3>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Headings</p>
+                        <p className="text-2xl" style={{ fontFamily: brainData.font_suggestions.headings }}>
+                          {brainData.font_suggestions.headings}
+                        </p>
+                      </div>
+                      <div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">Body</p>
+                        <p style={{ fontFamily: brainData.font_suggestions.body }}>
+                          {brainData.font_suggestions.body}
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
-              {/* Visual Elements */}
-              <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              {/* Logo Direction */}
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+              >
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
-                  Visual Elements
+                  Logo Direction
                 </h2>
-                
-                {/* Color Palette */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Color Palette</h3>
-                  <div className="grid grid-cols-4 gap-4">
-                    {Object.entries(brainData.color_palette).map(([name, color]) => (
-                      <div key={name} className="text-center">
-                        <div 
-                          className="w-full h-20 rounded-lg mb-2" 
-                          style={{ backgroundColor: color }}
-                        />
-                        <span className="text-sm text-gray-600 dark:text-gray-400 capitalize">
-                          {name}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Style</h3>
+                    <p className="text-gray-600 dark:text-gray-400">{logoDirection.style}</p>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Elements</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {logoDirection.elements?.map((element: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 rounded-full text-sm"
+                        >
+                          {element}
                         </span>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Concepts</h3>
+                    <div className="flex flex-wrap gap-2">
+                      {logoDirection.concepts?.map((concept: string, index: number) => (
+                        <span
+                          key={index}
+                          className="px-3 py-1 bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 rounded-full text-sm"
+                        >
+                          {concept}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
+              </motion.div>
 
-                {/* Typography */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Typography</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Headings</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.font_suggestions.headings}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Body</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.font_suggestions.body}</p>
+              {/* Layout & Photography */}
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+                className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8"
+              >
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                  Layout & Photography
+                </h2>
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Layout Style</h3>
+                    <div className="space-y-2">
+                      <p className="text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">Grid:</span> {layoutStyle.grid}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">Spacing:</span> {layoutStyle.spacing}
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">Hierarchy:</span> {layoutStyle.hierarchy}
+                      </p>
                     </div>
                   </div>
-                </div>
-
-                {/* Logo Direction */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo Direction</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Style</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.logo_direction.style}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Elements</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.logo_direction.elements.map((element, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {element}
-                          </span>
-                        ))}
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Photo Treatment</h3>
+                    <div className="space-y-2">
+                      <p className="text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">Style:</span> {photoTransform.style}
+                      </p>
+                      <div>
+                        <p className="text-gray-600 dark:text-gray-400 mb-2">
+                          <span className="font-medium">Filters:</span>
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {photoTransform.filters?.map((filter: string, index: number) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-200 rounded-full text-sm"
+                            >
+                              {filter}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Concepts</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.logo_direction.concepts.map((concept, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {concept}
-                          </span>
-                        ))}
-                      </div>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        <span className="font-medium">Mood:</span> {photoTransform.mood}
+                      </p>
                     </div>
                   </div>
                 </div>
-
-                {/* Layout Style */}
-                <div className="mb-8">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Layout Style</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grid</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.grid}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spacing</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.spacing}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hierarchy</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.hierarchy}</p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Photo Transform */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Photo Treatment</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Style</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.photo_transform.style}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filters</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.photo_transform.filters.map((filter, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {filter}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mood</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.photo_transform.mood}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              </motion.div>
             </div>
-          )}
-
-          {/* GPT Test Interface */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Test GPT Integration
-            </h2>
-            <form onSubmit={handleGptTest} className="space-y-4">
-              <div>
-                <label htmlFor="prompt" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                  Enter your prompt
-                </label>
-                <textarea
-                  id="prompt"
-                  rows={3}
-                  className="w-full rounded-lg border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 px-4 py-3 text-gray-900 dark:text-white placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
-                  placeholder="Ask GPT something..."
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  disabled={isGptLoading || !prompt.trim()}
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
-                >
-                  {isGptLoading ? (
-                    <>
-                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                      </svg>
-                      Processing...
-                    </>
-                  ) : (
-                    'Send to GPT'
-                  )}
-                </button>
-              </div>
-            </form>
-
-            {response && (
-              <div className="mt-6">
-                <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Response:</h3>
-                <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                  <p className="text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{response}</p>
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Brain Creation Test Interface */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-6 mt-6">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-              Test Brain Creation
-            </h2>
-            <form onSubmit={async (e) => {
-              e.preventDefault()
-              try {
-                const res = await fetch('/api/createBrain', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    user_id: user?.id,
-                    input: brand.description
-                  }),
-                })
-                const data = await res.json()
-                if (data.error) {
-                  alert('Error: ' + data.error)
-                } else {
-                  alert('Brain created successfully! ID: ' + data.id)
-                }
-              } catch (error) {
-                console.error('Error:', error)
-                alert('Failed to create brain')
-              }
-            }} className="space-y-4">
-              <p className="text-gray-600 dark:text-gray-300">
-                This will create a brain using your brand description as input.
-              </p>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                >
-                  Create Brain
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </main>
+          </motion.div>
+        </AnimatePresence>
+      </div>
     </div>
   )
 } 
