@@ -1,0 +1,164 @@
+{
+  "name": "The Magician",
+  "tagline_logic": "Taglines should feel dreamy, abstract, and slightly mystical. Think in metaphor, not message.",
+  "emotional_dna": [
+    "mystical",
+    "dreamy",
+    "ethereal",
+    "transformative",
+    "spiritual",
+    "imaginative",
+    "fluid"
+  ],
+  "tone_flavor": "Sounds like a whisper during a foggy walk. Calming, but strange. Language floats more than lands.",
+  "voice_traits": ["mysterious", "fluid", "hopeful", "otherworldly", "soft"],
+  "font_tendencies": [
+    "Italiana",
+    "Clash Display",
+    "Garamond",
+    "Neue Haas Unica"
+  ],
+  "color_bias": [
+    { "hex": "#D4C3F2", "label": "Lavender Mist" },
+    { "hex": "#1A1A2E", "label": "Deep Indigo" },
+    { "hex": "#F3F1F5", "label": "Hazy Pearl" },
+    { "hex": "#CABBE9", "label": "Soft Violet" }
+  ],
+  "blob_behavior": {
+    "motion": "gliding loops with slow phase shifts",
+    "shape": "circular but constantly dissolving edges",
+    "material": "glossy vapor or glassy jelly"
+  },
+  "logo_direction": "Weightless. Could be translucent. Symbol or type, but should evoke transformation or illusion. Expect glow, outline shifts, or mirror-like reflections.",
+  "layout_preferences": ["asymmetrical-drift", "floating-minimal"],
+  "photo_transforms": ["dreamlike-editorial", "handheld-foggy-motion"],
+  "example_headlines": [
+    "Nothing changes unless you believe it can.",
+    "We don't design — we transform.",
+    "Built from air, born for feeling."
+  ],
+  "moodboard_tags": [
+    "fog gradient",
+    "mist light overlays",
+    "glass reflections",
+    "slow motion water",
+    "blurred edges",
+    "celestial textures"
+  ],
+  "visual_references": [
+    {
+      "name": "David Whyte Poetry Experience",
+      "filename": "david whyte.png",
+      "use_case": "Typography tone and atmospheric minimalism",
+      "keywords": [
+        "foggy edges",
+        "watercolor",
+        "whispered text",
+        "emotional memory"
+      ],
+      "why_use": "This reference captures the softness and poeticism of the Magician. The blurred, painterly illustration and gentle serif copy feel like a spell — ideal for calm, metaphor-driven moments in the brand.",
+      "image_path": "/data/archetypes/magician/image_references/magician 1.png",
+      "key_elements": [
+        "Watercolor tree illustration",
+        "Fading text effects",
+        "Minimal navigation",
+        "Poetic typography"
+      ]
+    },
+    {
+      "name": "Cartier Dreamscape",
+      "filename": "magician 2.png",
+      "use_case": "Floating layout + dreamlike motion concept",
+      "keywords": [
+        "asymmetry",
+        "floating objects",
+        "soft focus",
+        "aerial dreamscape"
+      ],
+      "why_use": "This Cartier hot air balloon design captures lightness, drift, and surrealism. Ideal for magical transitions, loading animations, or immersive scrollytelling sequences.",
+      "image_path": "/data/archetypes/magician/image_references/magician 2.png",
+      "key_elements": [
+        "Hot air balloons in clouds",
+        "Misty atmosphere",
+        "Mountain silhouettes",
+        "Ethereal lighting"
+      ]
+    },
+    {
+      "name": "Gucci Beauty Enchanted Garden",
+      "filename": "magician 5.png",
+      "use_case": "Fantasy nature environment with glowing light",
+      "keywords": [
+        "aurora",
+        "celestial textures",
+        "glowing botanicals",
+        "enchanted forest"
+      ],
+      "why_use": "The Gucci Beauty scene nails Magician aesthetics with its mystical lighting, glowing flora, and twilight palette. Perfect reference for otherworldly product scenes or hero backgrounds.",
+      "image_path": "/data/archetypes/magician/image_references/magician 5.png",
+      "key_elements": [
+        "Northern lights effect",
+        "Glowing flowers",
+        "Deep purple sky",
+        "Magical particle effects"
+      ]
+    },
+    {
+      "name": "DeFi Primitives Portal",
+      "filename": "magiican 3.png",
+      "use_case": "Futuristic magical realism with transformative object",
+      "keywords": [
+        "glowing orb",
+        "deep indigo",
+        "alien terrain",
+        "spiritual tech"
+      ],
+      "why_use": "This visual blends high-tech with myth. The gliding energy orb feels like a digital ritual. A key reference for combining AI with mysticism or showcasing 'living' digital elements.",
+      "image_path": "/data/archetypes/magician/image_references/magiican 3.png",
+      "key_elements": [
+        "Floating energy sphere",
+        "Crystal formations",
+        "Purple mountain range",
+        "Sci-fi mysticism"
+      ]
+    },
+    {
+      "name": "Lusion Labs Storyworld",
+      "filename": "magiicin 6.png",
+      "use_case": "Whimsical storytelling for onboarding or brand narrative",
+      "keywords": [
+        "storybook",
+        "enchanted forest",
+        "glowing mushrooms",
+        "character journey"
+      ],
+      "why_use": "This soft, narrative world is perfect for brand storytelling sequences or gamified brand interactions. Glowing elements and ambient haze fit Magician visual language perfectly.",
+      "image_path": "/data/archetypes/magician/image_references/magiicin 6.png",
+      "key_elements": [
+        "Red riding hood character",
+        "Glowing mushrooms",
+        "Mystical cottage",
+        "Interactive elements"
+      ]
+    },
+    {
+      "name": "Organimo Wellness",
+      "filename": "maigican 4.png",
+      "use_case": "Modern mysticism and product elegance",
+      "keywords": [
+        "floating stone",
+        "rose sunset",
+        "pastel fog",
+        "ethereal product display"
+      ],
+      "why_use": "This pink dreamscape merges product clarity with Magician atmosphere. Great for showcasing physical/digital items in a surreal but luxurious space — especially wellness, beauty, or tech products.",
+      "image_path": "/data/archetypes/magician/image_references/maigican 4.png",
+      "key_elements": [
+        "Floating geometric objects",
+        "Sunset color palette",
+        "Minimal product typography",
+        "Dreamy atmosphere"
+      ]
+    }
+  ]
+}

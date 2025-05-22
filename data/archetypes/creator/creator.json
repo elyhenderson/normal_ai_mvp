@@ -1,0 +1,144 @@
+{
+  "name": "The Creator",
+  "tagline_logic": "Taglines should feel poetic but intentional. Start with feeling, land with clarity. Avoid startup speak.",
+  "emotional_dna": [
+    "expressive",
+    "story-led",
+    "poetic",
+    "warm",
+    "fluid",
+    "soulful",
+    "imaginative"
+  ],
+  "tone_flavor": "Feels hand-made and emotionally intelligent. Like a voiceover in an indie film or a caption on an artist's sketchbook.",
+  "voice_traits": ["poetic", "curious", "open", "layered", "personal"],
+  "font_tendencies": [
+    "Canela",
+    "Neue Montreal",
+    "Editorial New",
+    "ABC Diatype"
+  ],
+  "color_bias": [
+    { "hex": "#EDE7E0", "label": "Canvas Beige" },
+    { "hex": "#191919", "label": "Charcoal Black" },
+    { "hex": "#DAA520", "label": "Soft Gold" },
+    { "hex": "#F3F3F3", "label": "Paper White" }
+  ],
+  "blob_behavior": {
+    "motion": "slow ripple with natural drag",
+    "shape": "off-center organic with a breathing tension",
+    "material": "matte clay with slight grain"
+  },
+  "logo_direction": "Often wordmark-based or hand-drawn feeling. Imperfect on purpose. Could include typographic tweaks, negative space moments, or unexpected softness.",
+  "layout_preferences": ["loose-flow", "editorial-modular"],
+  "photo_transforms": ["warm-film-scan", "grainy-slowcore"],
+  "example_headlines": [
+    "You don't scale this. You feel it.",
+    "Built like a short story.",
+    "This isn't a product. It's a practice."
+  ],
+  "moodboard_tags": [
+    "hand-painted texture",
+    "warm ambient light",
+    "loose grids",
+    "analog color tone",
+    "paper texture",
+    "sketchbook overlays"
+  ],
+  "visual_references": [
+    {
+      "name": "CURAFFY AI Gallery",
+      "category": "minimalist_interface",
+      "key_elements": [
+        "Monochromatic flower photography",
+        "Numbered navigation (01, 02)",
+        "Clean technical metadata display",
+        "Black background with white text",
+        "Focus on single artwork presentation"
+      ],
+      "image_path": "/data/archetypes/creator/image_references/creator 1.png",
+      "design_principles": [
+        "Minimalist navigation",
+        "Focus on content",
+        "Technical precision",
+        "Elegant spacing"
+      ]
+    },
+    {
+      "name": "Rogi.dsgn Portfolio",
+      "category": "personal_branding",
+      "key_elements": [
+        "Large typography 'DIGITAL PRODUCT'",
+        "Pixel heart accent in orange",
+        "Clean navigation menu",
+        "Personal introduction text",
+        "Social media links (LinkedIn, Instagram, Threads, Behance)",
+        "Game UI portfolio example"
+      ],
+      "image_path": "/data/archetypes/creator/image_references/creator 2.png",
+      "design_principles": [
+        "Bold typography",
+        "Personal touch in branding",
+        "Professional presentation",
+        "Clear hierarchy"
+      ]
+    },
+    {
+      "name": "Polecat Agency",
+      "category": "interactive_design",
+      "key_elements": [
+        "Isometric illustration map",
+        "Playful navigation with info points",
+        "Custom illustrated world",
+        "Different themed areas (Works Town, About Island)",
+        "Interactive elements",
+        "Zoom controls"
+      ],
+      "image_path": "/data/archetypes/creator/image_references/creator 3.png",
+      "design_principles": [
+        "Playful interaction",
+        "Storytelling through design",
+        "Spatial navigation",
+        "Detailed illustration"
+      ]
+    },
+    {
+      "name": "Freshly Cached Gallery",
+      "category": "design_showcase",
+      "key_elements": [
+        "Numbered entries (N° system)",
+        "Grid layout",
+        "Artist attribution",
+        "Geometric artwork",
+        "Search and Spin navigation",
+        "Clean white space"
+      ],
+      "image_path": "/data/archetypes/creator/image_references/creator 4.png",
+      "design_principles": [
+        "Systematic organization",
+        "Gallery presentation",
+        "Artist recognition",
+        "Interactive browsing"
+      ]
+    },
+    {
+      "name": "Saapro Waste Management",
+      "category": "environmental_design",
+      "key_elements": [
+        "Nature photography integration",
+        "Butterfly motif",
+        "Green circular logo",
+        "Social media footer",
+        "Clean typography on natural background",
+        "Environmental messaging"
+      ],
+      "image_path": "/data/archetypes/creator/image_references/creator 5.png",
+      "design_principles": [
+        "Natural elements",
+        "Sustainable messaging",
+        "Organic composition",
+        "Professional environmental branding"
+      ]
+    }
+  ]
+}
