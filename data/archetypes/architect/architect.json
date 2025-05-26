@@ -1,165 +1,79 @@
 {
-    "name": "The Architect",
-    "tagline_logic": "Taglines should feel structured, elite, and emotionally minimal. Precision over poetry. Think: distilled philosophy.",
-    "emotional_dna": [
-      "structured",
-      "elite",
-      "calculated",
-      "intentional",
-      "precise",
-      "austere",
-      "cold"
-    ],
-    "tone_flavor": "Sharp and considered. Sounds like a manifesto written in Helvetica. No fluff. Every word earns its place.",
-    "voice_traits": ["confident", "minimal", "serious", "controlled", "philosophical"],
-    "font_tendencies": [
-      "Söhne",
-      "Neue Haas Grotesk",
-      "ABC Diatype",
-      "Beatrice"
-    ],
-    "color_bias": [
-      { "hex": "#111111", "label": "Black Concrete" },
-      { "hex": "#F7F7F7", "label": "Architectural White" },
-      { "hex": "#A6A6A6", "label": "Muted Steel" },
-      { "hex": "#D2CDC8", "label": "Pale Stone" }
-    ],
-    "blob_behavior": {
-      "motion": "geometric pulse with precise elasticity",
-      "shape": "perfect ellipse with minor asymmetry",
-      "material": "brushed metal or polished graphite"
-    },
-    "logo_direction": "Strict geometry. Precision spacing. Could be logotype with engineered letterforms or a grid-locked symbol. No visual metaphor.",
-    "layout_preferences": ["tight-grid", "hyper-systematic"],
-    "photo_transforms": ["cold-minimal-glare", "chrome-greyscale-crisp"],
-    "example_headlines": [
-      "Form follows logic.",
-      "Designed like a structure, not a suggestion.",
-      "Built to withstand trend and time."
-    ],
-    "moodboard_tags": [
-      "monochrome texture",
-      "sharp shadow light",
-      "tilted architectural forms",
-      "concrete grain",
-      "elevated symmetry",
-      "cold material surfaces"
-    ],
-    "visual_references": [
-      {
-        "name": "Dot Grid + Hummingbird",
-        "filename": "arch 1.PNG",
-        "use_case": "Grid-led visual discipline with poetic restraint",
-        "keywords": [
-          "precision grid",
-          "cold poetry",
-          "minimalist darkness",
-          "type-as-grid"
-        ],
-        "why_use": "This image shows the Architect's ability to infuse system thinking with symbolism. The hummingbird becomes architectural — not decorative — because it's integrated mathematically.",
-        "image_path": "/data/archetypes/architect/image_references/arch 1.png",
-        "key_elements": [
-          "Dot grid layout",
-          "Centered visual anchor",
-          "All-caps microtype",
-          "High contrast black"
-        ]
-      },
-      {
-        "name": "Minimal Note Index",
-        "filename": "arch 2.png",
-        "use_case": "Systematic intro screen with tone-setting typography",
-        "keywords": [
-          "dot matrix",
-          "calculated spacing",
-          "quiet structure",
-          "journal logic"
-        ],
-        "why_use": "Captures the emotional detachment of the Architect while still creating curiosity. The layout feels like a machine wrote a haiku.",
-        "image_path": "/data/archetypes/architect/image_references/arch 2.png",
-        "key_elements": [
-          "Left-aligned navigation",
-          "Dot paper texture",
-          "Sparse neutral palette",
-          "Single-column grid"
-        ]
-      },
-      {
-        "name": "Catalog Resume Breakdown",
-        "filename": "arch 3.png",
-        "use_case": "Literal resume grid as design object",
-        "keywords": [
-          "monospace",
-          "white paper logic",
-          "brutalist list structure",
-          "aesthetic metadata"
-        ],
-        "why_use": "This visual is a case study in how information density, when aligned precisely, becomes its own form of beauty.",
-        "image_path": "/data/archetypes/architect/image_references/arch 3.png",
-        "key_elements": [
-          "5-column grid",
-          "Small type",
-          "Dense content zones",
-          "No visual decoration"
-        ]
-      },
-      {
-        "name": "Name Anchor Typography",
-        "filename": "arch 4.png",
-        "use_case": "Brutalist personal identity",
-        "keywords": [
-          "oversized name",
-          "dark backdrop",
-          "total typographic control",
-          "identity by scale"
-        ],
-        "why_use": "Architecture of type. This is how an Architect claims space: not with emotion, but undeniable structural presence.",
-        "image_path": "/data/archetypes/architect/image_references/arch 4.png",
-        "key_elements": [
-          "Massive Helvetica-style type",
-          "Top-aligned metadata",
-          "Total white/black dichotomy",
-          "Zero ornamentation"
-        ]
-      },
-      {
-        "name": "Product Grid in Silence",
-        "filename": "arch 5.png",
-        "use_case": "E-commerce brutalism with ultra restraint",
-        "keywords": [
-          "white void",
-          "industrial layout",
-          "emotional neutrality",
-          "Dieter Rams influence"
-        ],
-        "why_use": "No shadows. No frills. Just matter-of-fact presentation of product. Ideal reference for Architect-style shopping interfaces or tech platforms.",
-        "image_path": "/data/archetypes/architect/image_references/arch 5.png",
-        "key_elements": [
-          "3x3 product spacing",
-          "No hover fluff",
-          "Light grey on white",
-          "Swiss design system"
-        ]
-      },
-      {
-        "name": "Selected Work with Highlight",
-        "filename": "arch 6.png",
-        "use_case": "Typographic hierarchy with brutalist flag",
-        "keywords": [
-          "neutral headline",
-          "signal color",
-          "black-on-black",
-          "modernist portfolio"
-        ],
-        "why_use": "This works because the pop of yellow doesn't break the system — it flags hierarchy. It's a functional highlighter, not expressive flair.",
-        "image_path": "/data/archetypes/architect/image_references/arch 6.png",
-        "key_elements": [
-          "Oversized sans-serif headline",
-          "Neutral supporting copy",
-          "Black background",
-          "Highlighter yellow bar"
-        ]
-      }
-    ]
-  }
+  "name": "The Architect",
   
+  "tagline_logic": "Taglines should be distilled principles - minimal, definitive, and enduring. Think: design mantras, not marketing phrases. No filler, no flair.",
+  
+  "emotional_dna": [
+    "structured",
+    "elite",
+    "calculated",
+    "intentional",
+    "precise",
+    "austere",
+    "emotionally neutral"
+  ],
+
+  "tone_flavor": "Reads like a manifesto in Helvetica. Every line is exact. No decoration. No apology. Designed to last 100 years.",
+  
+  "voice_traits": [
+    "confident",
+    "minimal",
+    "controlled",
+    "serious",
+    "philosophical",
+    "rational"
+  ],
+
+  "font_tendencies": [
+    "Söhne - modernist systematism",
+    "Neue Haas Grotesk - clean rational clarity",
+    "ABC Diatype - utility with precision",
+    "Beatrice - structured elegance with edge"
+  ],
+
+  "color_bias": [
+    { "hex": "#111111", "label": "Black Concrete - foundational and final" },
+    { "hex": "#F7F7F7", "label": "Architectural White - sterile, structured base" },
+    { "hex": "#A6A6A6", "label": "Muted Steel - functional neutrality" },
+    { "hex": "#D2CDC8", "label": "Pale Stone - quiet precision with warmth restraint" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Geometric pulse - exact intervals with restrained elasticity",
+    "shape": "Near-perfect ellipse - engineered imperfection",
+    "material": "Polished graphite or brushed aluminum - cold, reflective, inert"
+  },
+
+  "logo_direction": "Strict geometry. Often wordmark-based using modified grotesks. Engineered letterforms. Gridded negative space. No symbols unless constructed mathematically.",
+  
+  "layout_preferences": [
+    "tight-grid - no excess pixels",
+    "hyper-systematic - layout is logic",
+    "modular-rigid - reorderable, not fluid",
+    "Swiss-grid dominant - optical balance over visual drama"
+  ],
+
+  "photo_transforms": [
+    "cold-minimal-glare - indirect hard light",
+    "chrome-greyscale-crisp - emotionally sterile but sharply resolved"
+  ],
+
+  "example_headlines": [
+    "Form follows logic.",
+    "Designed like a structure, not a suggestion.",
+    "Built to withstand trend and time.",
+    "Emotion is a side effect of order.",
+    "Nothing extra. Everything necessary."
+  ],
+
+  "moodboard_tags": [
+    "monochrome texture",
+    "sharp architectural shadow",
+    "grid as visual system",
+    "concrete surface detail",
+    "oversized Helvetica",
+    "brutalist web structure",
+    "white-space tension",
+    "machine logic layout"
+  ]
+}

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useSearchParams } from 'next/navigation'
 import { useAuth } from '../../../context/AuthContext'
 import { supabase } from '../../../../utils/supabase'
+import Image from 'next/image'
 
 interface Brand {
   id: string
@@ -15,17 +16,13 @@ interface Brand {
 
 interface BrainData {
   id: string
-  brand_story: string
-  tagline: string
+  brand_name: string
+  archetype_primary: string
+  archetype_secondary: string
   tone: string
   voice_traits: string[]
-  primary_archetype: string
-  secondary_archetype: string
-  blob_behavior: {
-    movement: string
-    speed: string
-    complexity: string
-  }
+  tagline: string
+  brand_story: string
   color_palette: {
     primary: string
     secondary: string
@@ -36,21 +33,11 @@ interface BrainData {
     headings: string
     body: string
   }
-  logo_direction: {
-    style: string
-    elements: string[]
-    concepts: string[]
-  }
-  layout_style: {
-    grid: string
-    spacing: string
-    hierarchy: string
-  }
-  photo_transform: {
-    style: string
-    filters: string[]
-    mood: string
-  }
+  logo_direction: string
+  layout_style: string
+  photo_transformation: string
+  hero_image_url?: string
+  logo_url?: string
 }
 
 export default function BrandOverview() {
@@ -63,6 +50,10 @@ export default function BrandOverview() {
   const [prompt, setPrompt] = useState('')
   const [response, setResponse] = useState('')
   const [isGptLoading, setIsGptLoading] = useState(false)
+  const [isGeneratingImage, setIsGeneratingImage] = useState(false)
+  const [heroImageUrl, setHeroImageUrl] = useState<string | null>(null)
+  const [isGeneratingLogo, setIsGeneratingLogo] = useState(false)
+  const [logoUrl, setLogoUrl] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchData() {
@@ -90,6 +81,8 @@ export default function BrandOverview() {
 
           if (brainError) throw brainError
           setBrainData(brain)
+          setHeroImageUrl(brain.hero_image_url)
+          setLogoUrl(brain.logo_url)
         }
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -143,6 +136,129 @@ export default function BrandOverview() {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+      {/* Hero Section */}
+      {brainData && (
+        <div className="relative h-64 md:h-96 overflow-hidden">
+          {heroImageUrl ? (
+            <>
+              <Image
+                src={heroImageUrl}
+                alt={`${brand.name} hero image`}
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+            </>
+          ) : (
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-900 to-gray-800"></div>
+          )}
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full flex items-center">
+            <div className="text-white">
+              <h1 className="text-4xl md:text-5xl font-bold mb-4">{brand.name}</h1>
+              <p className="text-xl md:text-2xl text-gray-200">{brainData.tagline}</p>
+              <div className="mt-4 flex space-x-4">
+                <button
+                  onClick={async () => {
+                    try {
+                      setIsGeneratingImage(true)
+                      const res = await fetch('/api/generateHeroImage', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          brand_name: brand.name.trim(),
+                          archetype_primary: brainData.archetype_primary,
+                          archetype_secondary: brainData.archetype_secondary,
+                          color_palette: brainData.color_palette,
+                          photo_transformation: brainData.photo_transformation,
+                          brain_id: brainData.id
+                        }),
+                      })
+                      const data = await res.json()
+                      if (data.error) {
+                        console.error('Error details:', data.details)
+                        alert(`Error: ${data.error}\n\nPlease check the console for more details.`)
+                      } else {
+                        setHeroImageUrl(data.imageUrl)
+                      }
+                    } catch (error) {
+                      console.error('Error:', error)
+                      alert('Failed to generate hero image. Please check the console for more details.')
+                    } finally {
+                      setIsGeneratingImage(false)
+                    }
+                  }}
+                  disabled={isGeneratingImage}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white disabled:opacity-50"
+                >
+                  {isGeneratingImage ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Generating Hero Image...
+                    </>
+                  ) : (
+                    'Generate Hero Image'
+                  )}
+                </button>
+
+                <button
+                  onClick={async () => {
+                    try {
+                      setIsGeneratingLogo(true)
+                      const res = await fetch('/api/generateLogo', {
+                        method: 'POST',
+                        headers: {
+                          'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                          brand_name: brand.name.trim(),
+                          archetype_primary: brainData.archetype_primary,
+                          archetype_secondary: brainData.archetype_secondary,
+                          color_palette: brainData.color_palette,
+                          logo_direction: brainData.logo_direction,
+                          brain_id: brainData.id
+                        }),
+                      })
+                      const data = await res.json()
+                      if (data.error) {
+                        console.error('Error details:', data.details)
+                        alert(`Error: ${data.error}\n\nPlease check the console for more details.`)
+                      } else {
+                        setLogoUrl(data.logoUrl)
+                      }
+                    } catch (error) {
+                      console.error('Error:', error)
+                      alert('Failed to generate logo. Please check the console for more details.')
+                    } finally {
+                      setIsGeneratingLogo(false)
+                    }
+                  }}
+                  disabled={isGeneratingLogo}
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-black bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white disabled:opacity-50"
+                >
+                  {isGeneratingLogo ? (
+                    <>
+                      <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      </svg>
+                      Generating Logo...
+                    </>
+                  ) : (
+                    'Generate Logo'
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <nav className="bg-white shadow-sm dark:bg-gray-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -209,11 +325,11 @@ export default function BrandOverview() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Primary Archetype</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.primary_archetype}</p>
+                    <p className="text-gray-600 dark:text-gray-300">{brainData.archetype_primary}</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Secondary Archetype</h3>
-                    <p className="text-gray-600 dark:text-gray-300">{brainData.secondary_archetype}</p>
+                    <p className="text-gray-600 dark:text-gray-300">{brainData.archetype_secondary}</p>
                   </div>
                 </div>
               </div>
@@ -223,26 +339,25 @@ export default function BrandOverview() {
                 <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
                   Visual Elements
                 </h2>
-                
+
                 {/* Color Palette */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Color Palette</h3>
-                  <div className="grid grid-cols-4 gap-4">
-                    {Object.entries(brainData.color_palette).map(([name, color]) => (
-                      <div key={name} className="text-center">
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {brainData.color_palette && Object.entries(brainData.color_palette).map(([name, color]) => (
+                      <div key={name} className="flex flex-col items-center">
                         <div 
-                          className="w-full h-20 rounded-lg mb-2" 
+                          className="w-16 h-16 rounded-lg shadow-inner mb-2" 
                           style={{ backgroundColor: color }}
                         />
-                        <span className="text-sm text-gray-600 dark:text-gray-400 capitalize">
-                          {name}
-                        </span>
+                        <span className="text-sm text-gray-600 dark:text-gray-400 capitalize">{name}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-500 uppercase">{color}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                {/* Typography */}
+                {/* Font Suggestions */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Typography</h3>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -251,7 +366,7 @@ export default function BrandOverview() {
                       <p className="text-gray-600 dark:text-gray-400">{brainData.font_suggestions.headings}</p>
                     </div>
                     <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Body</h4>
+                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Body Text</h4>
                       <p className="text-gray-600 dark:text-gray-400">{brainData.font_suggestions.body}</p>
                     </div>
                   </div>
@@ -260,78 +375,43 @@ export default function BrandOverview() {
                 {/* Logo Direction */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo Direction</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Style</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.logo_direction.style}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Elements</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.logo_direction.elements.map((element, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {element}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Concepts</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.logo_direction.concepts.map((concept, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {concept}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">{brainData.logo_direction}</p>
                 </div>
 
                 {/* Layout Style */}
                 <div className="mb-8">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Layout Style</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Grid</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.grid}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Spacing</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.spacing}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Hierarchy</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style.hierarchy}</p>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">{brainData.layout_style}</p>
                 </div>
 
-                {/* Photo Transform */}
+                {/* Photo Transformation */}
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Photo Treatment</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Style</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.photo_transform.style}</p>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Filters</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {brainData.photo_transform.filters.map((filter, index) => (
-                          <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-sm">
-                            {filter}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Mood</h4>
-                      <p className="text-gray-600 dark:text-gray-400">{brainData.photo_transform.mood}</p>
-                    </div>
-                  </div>
+                  <p className="text-gray-600 dark:text-gray-400">{brainData.photo_transformation}</p>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Logo Display Section */}
+          {logoUrl && (
+            <div className="mb-12 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+                Brand Logo
+              </h2>
+              <div className="relative h-64 w-64 mx-auto overflow-hidden rounded-lg" style={{ backgroundColor: brainData?.color_palette?.primary || '#FFFFFF' }}>
+                <Image
+                  src={logoUrl}
+                  alt={`${brand.name} logo`}
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  priority
+                  className="p-4"
+                />
+              </div>
+              <p className="mt-4 text-sm text-center text-gray-600 dark:text-gray-400">
+                Generated logo for {brand.name}
+              </p>
             </div>
           )}
 
@@ -430,6 +510,28 @@ export default function BrandOverview() {
             </form>
           </div>
         </div>
+
+        {/* Bottom Hero Section Display */}
+        {heroImageUrl && (
+          <div className="mt-12 bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
+              Generated Hero Image
+            </h2>
+            <div className="relative h-[600px] w-full overflow-hidden rounded-lg">
+              <Image
+                src={heroImageUrl}
+                alt={`${brand.name} hero image full view`}
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
+                className="hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <p className="mt-4 text-sm text-gray-600 dark:text-gray-400">
+              Generated for {brand.name} using {brainData?.archetype_primary} and {brainData?.archetype_secondary} archetypes
+            </p>
+          </div>
+        )}
       </main>
     </div>
   )

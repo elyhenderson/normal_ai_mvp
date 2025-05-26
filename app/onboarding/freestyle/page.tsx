@@ -18,13 +18,17 @@ export default function Freestyle() {
     setError(null)
 
     try {
+      // Get the first line as the brand name, but ensure it's not empty
+      const lines = description.split('\n')
+      const brandName = lines[0].trim() || 'Untitled Brand'
+
       // Insert the brand
       const { data: brand, error: brandError } = await supabase
         .from('brands')
         .insert([
           {
             user_id: user?.id,
-            name: description.split('\n')[0].slice(0, 50), // Use first line as name
+            name: brandName.slice(0, 50), // Limit name length
             description,
             creation_method: 'freestyle'
           }
@@ -33,6 +37,9 @@ export default function Freestyle() {
         .single()
 
       if (brandError) throw brandError
+
+      // Wait a moment to ensure the brand is saved
+      await new Promise(resolve => setTimeout(resolve, 1000))
 
       // Create the brain
       const res = await fetch('/api/createBrain', {
