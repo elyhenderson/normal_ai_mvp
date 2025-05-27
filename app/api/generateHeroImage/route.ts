@@ -65,10 +65,24 @@ async function loadBrandData(brandId: string) {
 }
 
 async function loadArchetypeDetails(archetypeName: string): Promise<any> {
-  const cleanName = archetypeName.toLowerCase().replace(/^the\s+/, '').trim()
-  const archetypePath = path.join(process.cwd(), 'data', 'archetypes', cleanName, `${cleanName}.json`)
-  const data = JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
-  return data
+  try {
+    // Clean up archetype name: remove 'the' and convert to lowercase
+    const cleanArchetype = archetypeName.toLowerCase().replace(/^the\s+/, '').trim()
+    
+    // Try directory-based path first (for architect, creator, magician)
+    let archetypePath = path.join(process.cwd(), 'data', 'archetypes', cleanArchetype, `${cleanArchetype}.json`)
+    
+    try {
+      return JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
+    } catch (error) {
+      // If directory-based path fails, try flat file path
+      archetypePath = path.join(process.cwd(), 'data', 'archetypes', `${cleanArchetype}.json`)
+      return JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
+    }
+  } catch (error) {
+    console.error(`Error loading archetype ${archetypeName}:`, error)
+    throw error
+  }
 }
 
 function extractDesignLanguage(primary: any, secondary: any): string {

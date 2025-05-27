@@ -1,0 +1,78 @@
+{
+  "name": "The Sage",
+  "tagline_logic": "Taglines should be like ancient wisdom - profound, timeless, and enlightening. Think: distilled knowledge that guides and inspires.",
+  
+  "emotional_dna": [
+    "wise",
+    "contemplative",
+    "insightful",
+    "knowledgeable",
+    "calm",
+    "authoritative",
+    "enlightening"
+  ],
+
+  "tone_flavor": "Like a wise mentor sharing ancient wisdom. Calm, measured, and profound. Every word carries weight and meaning.",
+  
+  "voice_traits": [
+    "wise",
+    "insightful",
+    "authoritative",
+    "calm",
+    "profound",
+    "enlightening"
+  ],
+
+  "font_tendencies": [
+    "Cormorant - for timeless wisdom",
+    "Playfair Display - for classical authority",
+    "Libre Baskerville - for scholarly elegance",
+    "Crimson Text - for profound beauty"
+  ],
+
+  "color_bias": [
+    { "hex": "#2C5282", "label": "Deep Wisdom Blue - profound and calm" },
+    { "hex": "#F7FAFC", "label": "Pure White - clarity and truth" },
+    { "hex": "#805AD5", "label": "Mystic Purple - spiritual depth" },
+    { "hex": "#E2E8F0", "label": "Mist Gray - subtle wisdom" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Gentle transitions - like flowing wisdom",
+    "shape": "Harmonious curves - balanced and calm",
+    "material": "Ancient parchment - timeless and wise"
+  },
+
+  "logo_direction": "Prefers elegant typography with classical elements. Often incorporates wisdom symbols or philosophical imagery. Timeless and meaningful.",
+  
+  "layout_preferences": [
+    "wisdom-flow - like ancient scrolls",
+    "scholarly-rhythm - balanced and harmonious",
+    "knowledge-spacing - clear and profound",
+    "sage-aesthetic - timeless and wise"
+  ],
+
+  "photo_transforms": [
+    "wisdom-grade - soft and profound",
+    "sage-tone - timeless and enlightening"
+  ],
+
+  "example_headlines": [
+    "Wisdom that guides.",
+    "Knowledge that enlightens.",
+    "Truth that endures.",
+    "Insight that transforms.",
+    "Wisdom for the ages."
+  ],
+
+  "moodboard_tags": [
+    "ancient wisdom",
+    "philosophical symbols",
+    "classical architecture",
+    "timeless knowledge",
+    "scholarly elements",
+    "spiritual imagery",
+    "wisdom traditions",
+    "enlightening moments"
+  ]
+}

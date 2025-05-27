@@ -1,0 +1,78 @@
+{
+  "name": "The Rebel",
+  "tagline_logic": "Taglines should be like battle cries - bold, defiant, and unapologetic. Think: statements that challenge the status quo.",
+  
+  "emotional_dna": [
+    "defiant",
+    "bold",
+    "unconventional",
+    "passionate",
+    "authentic",
+    "challenging",
+    "revolutionary"
+  ],
+
+  "tone_flavor": "Like a manifesto being read at a protest. Bold, clear, and unafraid. Every word carries weight and purpose.",
+  
+  "voice_traits": [
+    "bold",
+    "defiant",
+    "authentic",
+    "passionate",
+    "challenging",
+    "revolutionary"
+  ],
+
+  "font_tendencies": [
+    "Bebas Neue - for bold statements",
+    "Impact - for strong presence",
+    "Anton - for revolutionary impact",
+    "Oswald - for powerful clarity"
+  ],
+
+  "color_bias": [
+    { "hex": "#E53E3E", "label": "Revolution Red - bold and defiant" },
+    { "hex": "#000000", "label": "Pure Black - strong and clear" },
+    { "hex": "#F6E05E", "label": "Warning Yellow - attention-grabbing" },
+    { "hex": "#2D3748", "label": "Night Black - deep and powerful" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Sharp transitions - like breaking barriers",
+    "shape": "Angular forms - bold and striking",
+    "material": "Raw concrete - strong and unrefined"
+  },
+
+  "logo_direction": "Prefers bold typography with strong geometric elements. Often incorporates protest symbols or revolutionary imagery. Striking and memorable.",
+  
+  "layout_preferences": [
+    "rebel-grid - like protest posters",
+    "manifesto-layout - bold and clear",
+    "revolutionary-rhythm - powerful and striking",
+    "rebel-aesthetic - strong and defiant"
+  ],
+
+  "photo_transforms": [
+    "protest-grade - high contrast and bold",
+    "revolutionary-tone - powerful and striking"
+  ],
+
+  "example_headlines": [
+    "Break the rules.",
+    "Challenge everything.",
+    "Defy the ordinary.",
+    "Make your own path.",
+    "Revolution starts here."
+  ],
+
+  "moodboard_tags": [
+    "protest art",
+    "street art",
+    "revolutionary symbols",
+    "bold typography",
+    "striking imagery",
+    "defiant moments",
+    "raw textures",
+    "powerful statements"
+  ]
+}

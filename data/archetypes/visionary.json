@@ -1,0 +1,78 @@
+{
+  "name": "The Visionary",
+  "tagline_logic": "Taglines should be like glimpses of the future - inspiring, transformative, and forward-thinking. Think: bold visions that inspire change.",
+  
+  "emotional_dna": [
+    "innovative",
+    "inspiring",
+    "forward-thinking",
+    "transformative",
+    "bold",
+    "revolutionary",
+    "futuristic"
+  ],
+
+  "tone_flavor": "Like a visionary leader describing the future. Bold, inspiring, and transformative. Every word paints a picture of what could be.",
+  
+  "voice_traits": [
+    "inspiring",
+    "innovative",
+    "transformative",
+    "bold",
+    "forward-thinking",
+    "revolutionary"
+  ],
+
+  "font_tendencies": [
+    "Space Grotesk - for futuristic clarity",
+    "Orbitron - for visionary impact",
+    "Rajdhani - for forward-thinking style",
+    "Chakra Petch - for innovative edge"
+  ],
+
+  "color_bias": [
+    { "hex": "#4299E1", "label": "Future Blue - innovative and clear" },
+    { "hex": "#000000", "label": "Deep Space - infinite potential" },
+    { "hex": "#9F7AEA", "label": "Vision Purple - creative and bold" },
+    { "hex": "#F7FAFC", "label": "Pure Light - clarity and vision" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Futuristic transitions - like glimpses of tomorrow",
+    "shape": "Dynamic forms - always evolving",
+    "material": "Holographic light - innovative and bright"
+  },
+
+  "logo_direction": "Prefers modern typography with futuristic elements. Often incorporates innovative symbols or forward-thinking imagery. Bold and inspiring.",
+  
+  "layout_preferences": [
+    "future-flow - like visions of tomorrow",
+    "innovative-rhythm - dynamic and bold",
+    "vision-spacing - clear and inspiring",
+    "visionary-aesthetic - forward-thinking and bold"
+  ],
+
+  "photo_transforms": [
+    "future-grade - bright and innovative",
+    "visionary-tone - inspiring and transformative"
+  ],
+
+  "example_headlines": [
+    "See the future.",
+    "Transform tomorrow.",
+    "Innovate today.",
+    "Vision that inspires.",
+    "Future starts here."
+  ],
+
+  "moodboard_tags": [
+    "futuristic design",
+    "innovative technology",
+    "visionary concepts",
+    "forward-thinking",
+    "transformative ideas",
+    "future vision",
+    "revolutionary change",
+    "inspiring moments"
+  ]
+}

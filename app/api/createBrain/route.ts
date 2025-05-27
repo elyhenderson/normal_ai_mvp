@@ -22,11 +22,26 @@ async function loadArchetypeData(): Promise<Archetype[]> {
   const archetypes: Archetype[] = []
   
   // Load each archetype's data
-  const files = ['architect/architect.json', 'creator/creator.json', 'magician/magician.json']
+  const files = [
+    'architect/architect.json',
+    'creator/creator.json',
+    'magician/magician.json',
+    'aesthetic-hacker.json',
+    'engineer.json',
+    'poet.json',
+    'rebel.json',
+    'sage.json',
+    'visionary.json'
+  ]
+  
   for (const file of files) {
-    const filePath = path.join(archetypesDir, file)
-    const data = JSON.parse(await fs.promises.readFile(filePath, 'utf8'))
-    archetypes.push(data)
+    try {
+      const filePath = path.join(archetypesDir, file)
+      const data = JSON.parse(await fs.promises.readFile(filePath, 'utf8'))
+      archetypes.push(data)
+    } catch (error) {
+      console.error(`Error loading archetype file ${file}:`, error)
+    }
   }
   
   return archetypes
@@ -67,7 +82,16 @@ export async function POST(req: Request) {
         "secondary": "name of secondary archetype"
       }
 
-      Available archetypes: ${archetypes.map(a => a.name).join(', ')}
+      IMPORTANT: You must choose from ONLY these available archetypes (no others are allowed):
+      - The Architect
+      - The Creator
+      - The Magician
+      - The Aesthetic Hacker
+      - The Engineer
+      - The Poet
+      - The Rebel
+      - The Sage
+      - The Visionary
 
       Brand concept: ${input}
     `
@@ -79,6 +103,24 @@ export async function POST(req: Request) {
     }
 
     const archetypeMatch = JSON.parse(archetypeResponse.replace(/```json\n?|```/g, '').trim())
+
+    // Validate that the selected archetypes are in our list
+    const validArchetypes = [
+      'The Architect',
+      'The Creator',
+      'The Magician',
+      'The Aesthetic Hacker',
+      'The Engineer',
+      'The Poet',
+      'The Rebel',
+      'The Sage',
+      'The Visionary'
+    ]
+
+    if (!validArchetypes.includes(archetypeMatch.primary) || !validArchetypes.includes(archetypeMatch.secondary)) {
+      console.error('Invalid archetype selected:', archetypeMatch)
+      return Response.json({ error: 'Invalid archetype selected' }, { status: 500 })
+    }
 
     // Find the matching archetype data
     const primaryArchetype = archetypes.find(a => a.name === archetypeMatch.primary)

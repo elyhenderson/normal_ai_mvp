@@ -1,0 +1,78 @@
+{
+  "name": "The Aesthetic Hacker",
+  "tagline_logic": "Taglines should feel like a clever exploit - unexpected, efficient, and slightly subversive. Think: elegant solutions that break conventional rules.",
+  
+  "emotional_dna": [
+    "clever",
+    "efficient",
+    "subversive",
+    "playful",
+    "precise",
+    "innovative",
+    "unconventional"
+  ],
+
+  "tone_flavor": "Like a master programmer explaining a beautiful hack. Technical but accessible. Clever but not smug. Always one step ahead.",
+  
+  "voice_traits": [
+    "witty",
+    "precise",
+    "innovative",
+    "efficient",
+    "playful",
+    "subversive"
+  ],
+
+  "font_tendencies": [
+    "JetBrains Mono - for technical precision",
+    "Space Grotesk - for modern edge",
+    "IBM Plex Mono - for clean efficiency",
+    "Inter - for digital clarity"
+  ],
+
+  "color_bias": [
+    { "hex": "#00FF00", "label": "Terminal Green - classic hacker aesthetic" },
+    { "hex": "#000000", "label": "Pure Black - digital void" },
+    { "hex": "#FF00FF", "label": "Neon Pink - subversive accent" },
+    { "hex": "#1A1A1A", "label": "Dark Mode - reduced eye strain" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Glitch transitions - precise but unpredictable",
+    "shape": "Geometric glitch - clean lines with intentional errors",
+    "material": "Digital artifacts - pixel-perfect with occasional corruption"
+  },
+
+  "logo_direction": "Prefers monospace typography with glitch effects. Often incorporates binary or code elements. Clean but with intentional digital artifacts.",
+  
+  "layout_preferences": [
+    "terminal-grid - like a well-organized codebase",
+    "glitch-systematic - clean with intentional errors",
+    "binary-rhythm - structured like efficient code",
+    "hacker-aesthetic - dark mode with neon accents"
+  ],
+
+  "photo_transforms": [
+    "glitch-artifact - clean with digital noise",
+    "terminal-grade - high contrast with neon accents"
+  ],
+
+  "example_headlines": [
+    "Elegant solutions to complex problems.",
+    "Breaking rules, not promises.",
+    "Code that makes you smile.",
+    "Hacking the status quo.",
+    "Efficiency through innovation."
+  ],
+
+  "moodboard_tags": [
+    "glitch art",
+    "terminal aesthetic",
+    "neon code",
+    "digital artifacts",
+    "monospace typography",
+    "dark mode UI",
+    "binary patterns",
+    "hacker culture"
+  ]
+}

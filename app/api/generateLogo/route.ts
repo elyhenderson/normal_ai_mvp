@@ -25,10 +25,19 @@ async function loadArchetypeReferences(archetypeName: string): Promise<any> {
   try {
     // Clean up archetype name: remove 'the' and convert to lowercase
     const cleanArchetype = archetypeName.toLowerCase().replace(/^the\s+/, '').trim()
-    const archetypePath = path.join(process.cwd(), 'data', 'archetypes', cleanArchetype, `${cleanArchetype}.json`)
-    console.log('Loading archetype from:', archetypePath)
-    const data = JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
-    return data.visual_references || []
+    
+    // Try directory-based path first (for architect, creator, magician)
+    let archetypePath = path.join(process.cwd(), 'data', 'archetypes', cleanArchetype, `${cleanArchetype}.json`)
+    
+    try {
+      const data = JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
+      return data.visual_references || []
+    } catch (error) {
+      // If directory-based path fails, try flat file path
+      archetypePath = path.join(process.cwd(), 'data', 'archetypes', `${cleanArchetype}.json`)
+      const data = JSON.parse(await fs.promises.readFile(archetypePath, 'utf8'))
+      return data.visual_references || []
+    }
   } catch (error) {
     console.error(`Error loading archetype ${archetypeName}:`, error)
     throw error

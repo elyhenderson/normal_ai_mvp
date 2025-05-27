@@ -1,0 +1,78 @@
+{
+  "name": "The Engineer",
+  "tagline_logic": "Taglines should be like technical specifications - clear, precise, and solution-focused. Think: functional statements that solve problems.",
+  
+  "emotional_dna": [
+    "practical",
+    "analytical",
+    "precise",
+    "solution-oriented",
+    "reliable",
+    "methodical",
+    "efficient"
+  ],
+
+  "tone_flavor": "Like a technical manual written by a poet. Clear, precise, but never cold. Every word serves a purpose.",
+  
+  "voice_traits": [
+    "precise",
+    "clear",
+    "practical",
+    "analytical",
+    "reliable",
+    "solution-focused"
+  ],
+
+  "font_tendencies": [
+    "Roboto Mono - for technical precision",
+    "Inter - for clean readability",
+    "IBM Plex Sans - for professional clarity",
+    "Source Sans Pro - for technical documentation"
+  ],
+
+  "color_bias": [
+    { "hex": "#2B6CB0", "label": "Engineering Blue - professional and reliable" },
+    { "hex": "#E2E8F0", "label": "Technical Gray - neutral and precise" },
+    { "hex": "#48BB78", "label": "Success Green - solution validation" },
+    { "hex": "#F7FAFC", "label": "Document White - clean and clear" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Precise transitions - like a well-oiled machine",
+    "shape": "Technical curves - engineered perfection",
+    "material": "Brushed steel - professional and durable"
+  },
+
+  "logo_direction": "Prefers technical typography with geometric elements. Often incorporates engineering symbols or technical diagrams. Clean and functional.",
+  
+  "layout_preferences": [
+    "technical-grid - like engineering blueprints",
+    "document-systematic - clear hierarchy",
+    "specification-layout - precise and organized",
+    "engineering-aesthetic - professional and functional"
+  ],
+
+  "photo_transforms": [
+    "technical-grade - clear and precise",
+    "engineering-document - professional and clean"
+  ],
+
+  "example_headlines": [
+    "Engineered for excellence.",
+    "Precision in every detail.",
+    "Solutions that work.",
+    "Built to last.",
+    "Technical excellence, human touch."
+  ],
+
+  "moodboard_tags": [
+    "technical diagrams",
+    "engineering blueprints",
+    "precise measurements",
+    "clean interfaces",
+    "professional documentation",
+    "technical specifications",
+    "engineering tools",
+    "solution architecture"
+  ]
+}

@@ -1,0 +1,78 @@
+{
+  "name": "The Poet",
+  "tagline_logic": "Taglines should be like verses - rhythmic, meaningful, and emotionally resonant. Think: distilled wisdom with emotional impact.",
+  
+  "emotional_dna": [
+    "sensitive",
+    "expressive",
+    "contemplative",
+    "insightful",
+    "emotional",
+    "artistic",
+    "profound"
+  ],
+
+  "tone_flavor": "Like a modern poet reading their work. Every word chosen with care, every pause intentional. Emotional but never sentimental.",
+  
+  "voice_traits": [
+    "lyrical",
+    "insightful",
+    "emotional",
+    "contemplative",
+    "expressive",
+    "artistic"
+  ],
+
+  "font_tendencies": [
+    "Cormorant - for poetic elegance",
+    "Playfair Display - for literary grace",
+    "Libre Baskerville - for classic poetry",
+    "Crimson Text - for timeless beauty"
+  ],
+
+  "color_bias": [
+    { "hex": "#4A5568", "label": "Ink Gray - timeless and deep" },
+    { "hex": "#F7FAFC", "label": "Page White - pure and clean" },
+    { "hex": "#805AD5", "label": "Poetic Purple - creative and deep" },
+    { "hex": "#E2E8F0", "label": "Mist Gray - subtle and soft" }
+  ],
+
+  "blob_behavior": {
+    "motion": "Flowing transitions - like words on a page",
+    "shape": "Organic curves - natural and fluid",
+    "material": "Handmade paper - textured and authentic"
+  },
+
+  "logo_direction": "Prefers elegant typography with subtle flourishes. Often incorporates literary elements or poetic symbols. Refined and meaningful.",
+  
+  "layout_preferences": [
+    "poetic-flow - like verses on a page",
+    "literary-rhythm - balanced and harmonious",
+    "verse-spacing - intentional and meaningful",
+    "poetry-aesthetic - elegant and expressive"
+  ],
+
+  "photo_transforms": [
+    "poetic-grade - soft and meaningful",
+    "literary-tone - timeless and emotional"
+  ],
+
+  "example_headlines": [
+    "Words that move you.",
+    "Where emotion meets expression.",
+    "The poetry of possibility.",
+    "Every moment, a verse.",
+    "Feel the rhythm of life."
+  ],
+
+  "moodboard_tags": [
+    "handwritten poetry",
+    "vintage books",
+    "ink textures",
+    "paper textures",
+    "literary symbols",
+    "poetic imagery",
+    "calligraphy",
+    "emotional moments"
+  ]
+}
